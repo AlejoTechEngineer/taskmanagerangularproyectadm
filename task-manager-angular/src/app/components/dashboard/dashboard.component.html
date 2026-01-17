@@ -1,0 +1,383 @@
+<div class="dashboard-container">
+    <app-header></app-header>
+    <app-sidebar></app-sidebar>
+
+    <main class="main-content">
+        <div class="content-wrapper">
+            <!-- Tasks Section -->
+            <div class="section" *ngIf="activeSection === 'tasks'">
+                <h2 class="section-title">Tareas del Equipo</h2>
+                <div *ngIf="loading; else tasksGrid" class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <ng-template #tasksGrid>
+                    <div class="tasks-grid">
+                        <div *ngFor="let task of tasks; trackBy: trackById" class="task-card">
+                            <div class="task-header">
+                                <h3>Tarea #{{ task.id }}</h3>
+                                <span class="task-status" [class.completed]="task.completed">
+                                    {{ task.completed ? 'Completada' : 'Pendiente' }}
+                                </span>
+                            </div>
+                            <p class="task-title">{{ task.title }}</p>
+                        </div>
+                    </div>
+
+                    <!-- GRÁFICOS DE ESTADÍSTICAS -->
+                    <div class="statistics-section">
+                        <h3 class="stats-title">📊 Estadísticas de Tareas</h3>
+                        <div class="charts-grid">
+                            <!-- Gráfico Circular -->
+                            <div class="chart-card">
+                                <h4>Estado de Tareas</h4>
+                                <div class="circular-chart">
+                                    <svg viewBox="0 0 36 36" class="circular-chart-svg">
+                                        <path class="circle-bg"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle" [attr.stroke-dasharray]="getProgressPercentage() + ', 100'"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" class="percentage">{{ getProgressPercentage() }}%</text>
+                                    </svg>
+                                </div>
+                                <p class="chart-label">Tareas Completadas</p>
+                            </div>
+
+                            <!-- Barra de Progreso Vertical -->
+                            <div class="chart-card">
+                                <h4>Progreso Total</h4>
+                                <div class="vertical-bars">
+                                    <div class="bar-container">
+                                        <div class="bar completed"
+                                            [style.height.%]="(completedTasksCount / tasks.length) * 100"></div>
+                                        <span class="bar-label">{{ completedTasksCount }}</span>
+                                        <p class="bar-text">Completadas</p>
+                                    </div>
+                                    <div class="bar-container">
+                                        <div class="bar pending"
+                                            [style.height.%]="(pendingTasksCount / tasks.length) * 100"></div>
+                                        <span class="bar-label">{{ pendingTasksCount }}</span>
+                                        <p class="bar-text">Pendientes</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Estadísticas Rápidas -->
+                            <div class="chart-card stats-quick">
+                                <h4>Resumen Rápido</h4>
+                                <div class="quick-stat">
+                                    <span class="stat-icon">✅</span>
+                                    <div class="stat-info">
+                                        <span class="stat-number">{{ completedTasksCount }}</span>
+                                        <span class="stat-label">Completadas</span>
+                                    </div>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="stat-icon">⏱️</span>
+                                    <div class="stat-info">
+                                        <span class="stat-number">{{ pendingTasksCount }}</span>
+                                        <span class="stat-label">Pendientes</span>
+                                    </div>
+                                </div>
+                                <div class="quick-stat">
+                                    <span class="stat-icon">📋</span>
+                                    <div class="stat-info">
+                                        <span class="stat-number">{{ tasks.length }}</span>
+                                        <span class="stat-label">Total</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+            <!-- Users Section -->
+            <div class="section" *ngIf="activeSection === 'users'">
+                <h2 class="section-title">Usuarios del Sistema</h2>
+                <div class="users-grid">
+                    <div *ngFor="let user of users.slice(0, 6); trackBy: trackById" class="user-card">
+                        <div class="user-header">
+                            <div class="user-avatar-large">{{ user.name.charAt(0) }}</div>
+                            <div class="user-info-text">
+                                <h3>{{ user.name }}</h3>
+                                <p class="user-email">{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <p class="user-company">{{ user.company.name }}</p>
+                    </div>
+                </div>
+
+                <!-- GRÁFICO DE USUARIOS ACTIVOS -->
+                <div class="statistics-section">
+                    <h3 class="stats-title">👥 Actividad de Usuarios</h3>
+                    <div class="charts-grid">
+                        <div class="chart-card wide">
+                            <h4>Usuarios Activos vs Inactivos</h4>
+                            <div class="horizontal-bars">
+                                <div class="h-bar-row">
+                                    <span class="h-bar-label">Activos</span>
+                                    <div class="h-bar-bg">
+                                        <div class="h-bar active" [style.width.%]="(users.length / 10) * 100"></div>
+                                    </div>
+                                    <span class="h-bar-number">{{ users.length }}</span>
+                                </div>
+                                <div class="h-bar-row">
+                                    <span class="h-bar-label">Inactivos</span>
+                                    <div class="h-bar-bg">
+                                        <div class="h-bar inactive" [style.width.%]="((10 - users.length) / 10) * 100">
+                                        </div>
+                                    </div>
+                                    <span class="h-bar-number">{{ 10 - users.length }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Section -->
+            @if (activeSection === 'calendar') {
+            <div class="section calendar-section">
+                <h2 class="section-title">📅 Calendario</h2>
+
+                <div class="calendar-container">
+                    <div class="calendar-widget">
+                        <div class="calendar-header">
+                            <h3>Enero 2026</h3>
+                        </div>
+
+                        <div class="calendar-grid">
+                            <div class="day-name">Dom</div>
+                            <div class="day-name">Lun</div>
+                            <div class="day-name">Mar</div>
+                            <div class="day-name">Mié</div>
+                            <div class="day-name">Jue</div>
+                            <div class="day-name">Vie</div>
+                            <div class="day-name">Sáb</div>
+
+                            <!-- Días del mes -->
+                            <div class="day empty"></div>
+                            <div class="day empty"></div>
+                            <div class="day empty"></div>
+                            <div class="day">1</div>
+                            <div class="day">2</div>
+                            <div class="day">3</div>
+                            <div class="day">4</div>
+                            <div class="day">5</div>
+                            <div class="day">6</div>
+                            <div class="day">7</div>
+                            <div class="day">8</div>
+                            <div class="day">9</div>
+                            <div class="day">10</div>
+                            <div class="day">11</div>
+                            <div class="day">12</div>
+                            <div class="day">13</div>
+                            <div class="day">14</div>
+                            <div class="day">15</div>
+                            <div class="day">16</div>
+                            <div class="day today">17</div>
+                            <div class="day">18</div>
+                            <div class="day">19</div>
+                            <div class="day">20</div>
+                            <div class="day">21</div>
+                            <div class="day">22</div>
+                            <div class="day">23</div>
+                            <div class="day">24</div>
+                            <div class="day">25</div>
+                            <div class="day">26</div>
+                            <div class="day">27</div>
+                            <div class="day">28</div>
+                            <div class="day">29</div>
+                            <div class="day">30</div>
+                            <div class="day">31</div>
+                        </div>
+                    </div>
+
+                    <div class="events-panel">
+                        <h3>Eventos próximos</h3>
+                        <div class="event-item">
+                            <div class="event-date">20 Ene</div>
+                            <div class="event-info">
+                                <h4>Reunión de equipo</h4>
+                                <p>10:00 AM - 11:00 AM</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">22 Ene</div>
+                            <div class="event-info">
+                                <h4>Presentación proyecto</h4>
+                                <p>2:00 PM - 3:30 PM</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">25 Ene</div>
+                            <div class="event-info">
+                                <h4>Review mensual</h4>
+                                <p>4:00 PM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+
+            <!-- REPORTES -->
+            <div class="section" *ngIf="activeSection === 'reports'">
+                <h2 class="section-title">📊 Reportes del Sistema</h2>
+
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <div class="report-icon">✅</div>
+                        <h3>Tareas Completadas</h3>
+                        <p class="report-number">{{ completedTasksCount }}</p>
+                        <p class="report-label">de {{ tasks.length }} totales</p>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">👥</div>
+                        <h3>Usuarios Activos</h3>
+                        <p class="report-number">{{ users.length }}</p>
+                        <p class="report-label">usuarios registrados</p>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">📈</div>
+                        <h3>Progreso General</h3>
+                        <p class="report-number">{{ getProgressPercentage() }}%</p>
+                        <p class="report-label">completado</p>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">⏱️</div>
+                        <h3>Tareas Pendientes</h3>
+                        <p class="report-number">{{ pendingTasksCount }}</p>
+                        <p class="report-label">por completar</p>
+                    </div>
+                </div>
+
+                <!-- DETALLE MEJORADO -->
+                <div class="report-detail-modern">
+                    <div class="detail-header">
+                        <h3>🎯 Distribución de Tareas por Usuario</h3>
+                        <span class="detail-badge">Top 5 Usuarios</span>
+                    </div>
+                    <div class="detail-list-modern">
+                        <div *ngFor="let user of users.slice(0, 5); let i = index; trackBy: trackById"
+                            class="detail-item-modern" [style.animation-delay.s]="i * 0.1">
+                            <div class="user-rank">{{ i + 1 }}</div>
+                            <div class="user-avatar-small">{{ user.name.charAt(0) }}</div>
+                            <div class="user-detail-info">
+                                <span class="detail-user-name">{{ user.name }}</span>
+                                <span class="detail-user-email">{{ user.email }}</span>
+                            </div>
+                            <div class="task-count-badge">
+                                <span class="count-number">{{ getTasksCountByUser(user.id) }}</span>
+                                <span class="count-label">tareas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOCUMENTOS -->
+            <div class="section" *ngIf="activeSection === 'documents'">
+                <h2 class="section-title">📄 Documentos del Proyecto</h2>
+
+                <div class="documents-grid-modern">
+                    <div *ngFor="let document of documents; let i = index" class="document-card-modern"
+                        [style.animation-delay.s]="i * 0.1">
+                        <div class="doc-icon-wrapper">
+                            <div class="doc-icon">{{ document.icon }}</div>
+                        </div>
+                        <div class="doc-content">
+                            <h3>{{ document.title }}</h3>
+                            <p class="document-date">{{ document.date }}</p>
+                            <button class="document-btn-modern">
+                                <span>Ver documento</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONFIGURACIÓN - CORREGIDO -->
+            @if (activeSection === 'settings') {
+            <div class="section settings-section">
+                <h2 class="section-title">⚙️ Configuración del Sistema</h2>
+
+                <div class="settings-grid">
+                    <!-- Perfil de Usuario -->
+                    <div class="settings-card">
+                        <div class="settings-icon">👤</div>
+                        <h3>Perfil de Usuario</h3>
+                        <p>Actualiza tu información personal y preferencias</p>
+                        <button class="settings-button">
+                            <span>Editar Perfil</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                    <!-- Notificaciones -->
+                    <div class="settings-card">
+                        <div class="settings-icon">🔔</div>
+                        <h3>Notificaciones</h3>
+                        <p>Gestiona cómo recibes alertas y actualizaciones</p>
+                        <button class="settings-button">
+                            <span>Configurar</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                    <!-- Seguridad -->
+                    <div class="settings-card">
+                        <div class="settings-icon">🔒</div>
+                        <h3>Seguridad</h3>
+                        <p>Contraseña, autenticación y privacidad</p>
+                        <button class="settings-button">
+                            <span>Gestionar</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                    <!-- Apariencia -->
+                    <div class="settings-card">
+                        <div class="settings-icon">🎨</div>
+                        <h3>Apariencia</h3>
+                        <p>Personaliza el tema y la interfaz</p>
+                        <button class="settings-button">
+                            <span>Personalizar</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                    <!-- Idioma y Región -->
+                    <div class="settings-card">
+                        <div class="settings-icon">🌍</div>
+                        <h3>Idioma y Región</h3>
+                        <p>Configura idioma, zona horaria y formato</p>
+                        <button class="settings-button">
+                            <span>Ajustar</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                    <!-- Integraciones -->
+                    <div class="settings-card">
+                        <div class="settings-icon">🔌</div>
+                        <h3>Integraciones</h3>
+                        <p>Conecta con otras herramientas y servicios</p>
+                        <button class="settings-button">
+                            <span>Explorar</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </main>
+</div>

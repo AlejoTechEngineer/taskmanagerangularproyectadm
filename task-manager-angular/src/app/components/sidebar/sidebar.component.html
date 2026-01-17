@@ -1,0 +1,10 @@
+<aside class="sidebar">
+    <nav class="sidebar-nav">
+        @for (item of menuItems; track item.id) {
+        <button class="nav-item" [class.active]="isActive(item.id)" (click)="changeSection(item.id)">
+            <span class="nav-icon">{{ item.icon }}</span>
+            <span class="nav-label">{{ item.label }}</span>
+        </button>
+        }
+    </nav>
+</aside>
