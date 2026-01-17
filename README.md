@@ -3,8 +3,17 @@
 ![Angular](https://img.shields.io/badge/Angular-18.x-red?style=for-the-badge&logo=angular)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
+![Netlify](https://img.shields.io/badge/Netlify-Deployed-00C7B7?style=for-the-badge&logo=netlify)
 
 Aplicación web moderna de gestión de tareas desarrollada con Angular 18, que implementa un sistema completo de autenticación, gestión de roles, integración con API pública y sistema de temas claro/oscuro.
+
+---
+
+## Demo en Vivo
+
+**Aplicación Desplegada**: [https://taskmanagerangularproyectadm.netlify.app/](https://taskmanagerangularproyectadm.netlify.app/)
+
+**Repositorio GitHub**: [https://github.com/AlejoTechEngineer/taskmanagerangularproyectadm](https://github.com/AlejoTechEngineer/taskmanagerangularproyectadm)
 
 ---
 
@@ -54,6 +63,7 @@ Aplicación web moderna de gestión de tareas desarrollada con Angular 18, que i
 | RxJS | 7.x | Programación reactiva |
 | Angular Router | 18.x | Gestión de rutas |
 | Docker | Latest | Containerización |
+| Netlify | - | Hosting y despliegue continuo |
 | JSONPlaceholder | Public API | Datos de prueba |
 
 ---
@@ -151,6 +161,7 @@ taskmanagerangularproyectadm/
 │   └── styles.css              # Estilos globales
 ├── Dockerfile                  # Configuración para containerización
 ├── nginx.conf                  # Configuración del servidor web
+├── netlify.toml                # Configuración de despliegue en Netlify
 ├── package.json                # Dependencias del proyecto
 └── README.md                   # Documentación
 ```
@@ -203,38 +214,33 @@ taskmanagerangularproyectadm/
 
 ---
 
-## Despliegue
+## Despliegue en Netlify
 
-### Netlify
+La aplicación está desplegada en Netlify con despliegue continuo desde GitHub.
 
-#### Opción 1: Despliegue Manual
+**URL de producción**: [https://taskmanagerangularproyectadm.netlify.app/](https://taskmanagerangularproyectadm.netlify.app/)
 
-1. Construir la aplicación:
-   ```bash
-   ng build --configuration production
-   ```
+### Configuración de Netlify
 
-2. Crear archivo `netlify.toml` en la raíz:
-   ```toml
-   [build]
-     publish = "dist/task-manager-angular/browser"
-     command = "ng build --configuration production"
+El archivo `netlify.toml` en la raíz del proyecto contiene:
 
-   [[redirects]]
-     from = "/*"
-     to = "/index.html"
-     status = 200
-   ```
+```toml
+[build]
+  publish = "dist/task-manager-angular/browser"
+  command = "ng build --configuration production"
 
-3. Desplegar en [Netlify Drop](https://app.netlify.com/drop)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
 
-#### Opción 2: Despliegue con Git
+### Proceso de Despliegue
 
-1. Conectar repositorio en Netlify
-2. Configurar build:
-   - Build command: `ng build --configuration production`
-   - Publish directory: `dist/task-manager-angular/browser`
-3. Deploy automático con cada push a main
+1. Cada push a la rama `main` en GitHub activa automáticamente un nuevo despliegue
+2. Netlify ejecuta `ng build --configuration production`
+3. Los archivos compilados se publican desde `dist/task-manager-angular/browser`
+4. Las rutas de Angular se manejan mediante redirects para SPA
 
 ---
 
@@ -317,9 +323,10 @@ Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detall
 
 ---
 
-## Repositorio
+## Enlaces
 
-**GitHub**: [https://github.com/AlejoTechEngineer/taskmanagerangularproyectadm](https://github.com/AlejoTechEngineer/taskmanagerangularproyectadm)
+- **Demo en Vivo**: [https://taskmanagerangularproyectadm.netlify.app/](https://taskmanagerangularproyectadm.netlify.app/)
+- **Repositorio GitHub**: [https://github.com/AlejoTechEngineer/taskmanagerangularproyectadm](https://github.com/AlejoTechEngineer/taskmanagerangularproyectadm)
 
 ---
 
