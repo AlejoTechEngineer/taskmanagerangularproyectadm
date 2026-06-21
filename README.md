@@ -1,9 +1,15 @@
+<div align="center">
+
 # Task Manager - Aplicación Web Angular
 
 ![Angular](https://img.shields.io/badge/Angular-18.x-red?style=for-the-badge&logo=angular)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
 ![Netlify](https://img.shields.io/badge/Netlify-Deployed-00C7B7?style=for-the-badge&logo=netlify)
+
+</div>
+
+---
 
 Aplicación web moderna de gestión de tareas desarrollada con Angular 18, que implementa un sistema completo de autenticación, gestión de roles, integración con API pública y sistema de temas claro/oscuro.
 
