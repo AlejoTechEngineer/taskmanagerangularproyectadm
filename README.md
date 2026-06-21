@@ -60,6 +60,23 @@ Aplicación web moderna de gestión de tareas desarrollada con Angular 18, que i
 
 ---
 
+## Arquitectura
+
+```mermaid
+flowchart TD
+    A[Usuario - Admin / Usuario estandar] --> B[App Angular 18 - taskmanagerangularproyectadm.netlify.app]
+    B --> C[Angular Router - Proteccion de rutas Guards]
+    C --> D[Modulo Auth - LocalStorage / Simulacion sin backend]
+    C --> E[Modulo Tareas - Tarjetas Pendiente/Completada]
+    C --> F[Modulo Calendario - Vista mensual interactiva]
+    C --> G[Modulo Usuarios - Listado del equipo]
+    C --> H[Modulo Reportes - solo Admin]
+    C --> I[Modulo Documentos - solo Admin]
+    C --> J[Modulo Configuracion - solo Admin]
+    E & G --> K[JSONPlaceholder API - /todos / /users]
+    B --> L[Docker Container - Despliegue en Netlify CI/CD]
+```
+
 ## Tecnologías Utilizadas
 
 | Tecnología | Versión | Uso |
